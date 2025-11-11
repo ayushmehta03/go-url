@@ -40,10 +40,10 @@ func generateShortUrl(OrignalURL string) string{
 	hash:=hex.EncodeToString(data);
 
 
-	fmt.Println(hash[:8])
+	 return hash[:8]
 
 
-	return "ayush"
+
 }
 
 
@@ -76,10 +76,7 @@ func getURL(id string) (Url,error){
 	return url,nil
 }
 
-func handler(w http.ResponseWriter, r *http.Request){
-	
 
-}
 
 func shortURLHandler(w http.ResponseWriter, r*http.Request){
 
@@ -113,17 +110,29 @@ func shortURLHandler(w http.ResponseWriter, r*http.Request){
 
 
 
-func
+func redirectUrlHandler( w http.ResponseWriter, r *http.Request){
+
+	id:=r.URL.Path[len("/redirect/"):]
+
+	url,err:=getURL(id)
+	if err!=nil{
+		http.Error(w,"Invalid Request",http.StatusBadRequest)
+
+
+	}
+
+	http.Redirect(w,r,url.OrignalUrl,http.StatusFound)
+}
 
 
 func main(){
-	// fmt.Println("starting")
+ fmt.Println("starting.....")
 
-//	 OriganlUrl:="https://github.com/ayushmehta03/go-url"
 
 	 
-	http.HandleFunc("/",handler)
 	http.HandleFunc("/shorten",shortURLHandler)
+
+	http.HandleFunc("/redirect/",redirectUrlHandler)
 
 err:=	http.ListenAndServe(":3000",nil)
 if err!=nil{
