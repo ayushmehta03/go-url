@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"time"
 )
@@ -49,6 +50,8 @@ func createURL( OrignalURL string) string {
 
 	id:=shortUrl
 
+
+	// save to the map with unqiue id key and value as struct
 	urlDb[id]=Url{
 		Id: id,
 		OrignalUrl: OrignalURL,
@@ -56,10 +59,20 @@ func createURL( OrignalURL string) string {
 		CreatedAt: time.Now(),
 	}
 
+
+
 	return shortUrl;
 
 }
 
+
+func getURL(id string) (Url,error){
+	url,ok:=urlDb[id]
+	if !ok{
+		return Url{},errors.New("no such url found")
+	}
+	return url,nil
+}
 
 
 func main(){
