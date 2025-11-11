@@ -3,8 +3,10 @@ package main
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"time"
 )
 
@@ -74,8 +76,61 @@ func getURL(id string) (Url,error){
 	return url,nil
 }
 
+func handler(w http.ResponseWriter, r *http.Request){
+	
+
+}
+
+func shortURLHandler(w http.ResponseWriter, r*http.Request){
+
+ var data struct{
+		URL string `json:"url"`
+	}
+
+
+	err:=json.NewDecoder(r.Body).Decode(&data)
+	if err!=nil{
+		http.Error(w,"Inavlid request body",http.StatusBadRequest)
+	}
+
+	shortUrl:=createURL(data.URL)
+
+
+	response:= struct{
+		ShortUrl string	`json:"short_url"`
+	}{ShortUrl: shortUrl}
+
+
+		w.Header().Set("Content-Type","application/json")
+
+		json.NewEncoder(w).Encode(response)
+
+
+
+
+
+}
+
+
+
+func
+
 
 func main(){
-	fmt.Println("intial")
+	// fmt.Println("starting")
+
+//	 OriganlUrl:="https://github.com/ayushmehta03/go-url"
+
+	 
+	http.HandleFunc("/",handler)
+	http.HandleFunc("/shorten",shortURLHandler)
+
+err:=	http.ListenAndServe(":3000",nil)
+if err!=nil{
+fmt.Println("error on starting server")
+
+}
+
+
 
 }
