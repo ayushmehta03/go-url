@@ -126,11 +126,15 @@ func redirectUrlHandler( w http.ResponseWriter, r *http.Request){
 
 
 func main(){
- fmt.Println("starting.....")
+ fmt.Println("starting... url shortner ")
 
 
+
+	// route for shorting the url by passing the data
 	 
 	http.HandleFunc("/shorten",shortURLHandler)
+
+	// this route will redirect to the link with hashed string
 
 	http.HandleFunc("/redirect/",redirectUrlHandler)
 
